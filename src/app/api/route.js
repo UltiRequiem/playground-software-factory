@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
+const dbConfig = {
+  filename: "store.db",
+  driver: sqlite3.Database,
+};
+
 export async function GET(request) {
   try {
-    const db = await open({
-      filename: "store.db",
-      driver: sqlite3.Database,
-    });
+    const db = await open(dbConfig);
 
     const products = await db.all("SELECT * FROM products");
 
@@ -27,10 +29,7 @@ export async function POST(request) {
     const body = await request.json();
     const { name, description, image_url } = body;
 
-    const db = await open({
-      filename: "store.db",
-      driver: sqlite3.Database,
-    });
+    const db = await open(dbConfig);
 
     const result = await db.run(
       "INSERT INTO products (name, description, image_url) VALUES (?, ?, ?)",
@@ -63,10 +62,7 @@ export async function DELETE(request) {
       );
     }
 
-    const db = await open({
-      filename: "store.db",
-      driver: sqlite3.Database,
-    });
+    const db = await open(dbConfig);
 
     const result = await db.run("DELETE FROM products WHERE id = ?", [id]);
 
@@ -105,10 +101,7 @@ export async function PUT(request) {
       );
     }
 
-    const db = await open({
-      filename: "store.db",
-      driver: sqlite3.Database,
-    });
+    const db = await open(dbConfig);
 
     const result = await db.run(
       "UPDATE products SET name = ?, description = ?, image_url = ? WHERE id = ?",
