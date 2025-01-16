@@ -50,3 +50,88 @@ export async function POST(request) {
     );
   }
 }
+
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID del producto es requerido" },
+        { status: 400 }
+      );
+    }
+
+    const db = await open({
+      filename: "store.db",
+      driver: sqlite3.Database,
+    });
+
+    const result = await db.run("DELETE FROM products WHERE id = ?", [id]);
+
+    await db.close();
+
+    if (result.changes === 0) {
+      return NextResponse.json(
+        { error: "Producto no encontrado" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Producto eliminado" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Error al eliminar producto", details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    const body = await request.json();
+    const { name, description, image_url } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID del producto es requerido" },
+        { status: 400 }
+      );
+    }
+
+    const db = await open({
+      filename: "store.db",
+      driver: sqlite3.Database,
+    });
+
+    const result = await db.run(
+      "UPDATE products SET name = ?, description = ?, image_url = ? WHERE id = ?",
+      [name, description, image_url, id]
+    );
+
+    await db.close();
+
+    if (result.changes === 0) {
+      return NextResponse.json(
+        { error: "Producto no encontrado" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Producto actualizado" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Error al actualizar producto", details: error.message },
+      { status: 500 }
+    );
+  }
+}
