@@ -111,7 +111,7 @@ export default function Page() {
       <h1 className="text-2xl font-bold mb-6">Gestión de Productos</h1>
 
       {/* Formulario */}
-      <div className="mb-8 p-4 bg-gray-600 rounded">
+      <div className="mb-8 p-4 bg-gray-600 rounded text-zinc-950">
         <h2 className="text-xl font-semibold mb-4">
           {editingProduct ? "Editar Producto" : "Crear Nuevo Producto"}
         </h2>
