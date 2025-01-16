@@ -66,7 +66,7 @@ export default function Page() {
       <h1 className="text-2xl font-bold mb-6">Gestión de Productos</h1>
 
       {/* Formulario de nuevo producto */}
-      <div className="mb-8 p-4 bg-gray-100 rounded">
+      <div className="mb-8 p-4 bg-gray-600 rounded">
         <h2 className="text-xl font-semibold mb-4">Crear Nuevo Producto</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
